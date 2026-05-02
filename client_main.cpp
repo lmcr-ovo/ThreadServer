@@ -1,4 +1,4 @@
-// client_main.cpp
+// 客户端入口文件
 #include "net/sock.hpp"
 #include "client.hpp"
 #include <iostream>

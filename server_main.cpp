@@ -1,4 +1,4 @@
-// server_main.cpp
+// 服务端入口文件
 #include "net/sock.hpp"
 #include "server.hpp"
 #include <iostream>

@@ -18,7 +18,7 @@ void Client::connectTo(const std::string& ip, uint16_t port) {
     running_.store(true);
     recvThread_ = std::thread(&Client::recvLoop, this);
 
-    // 可选：上线包
+    // 可选：发送上线包
     Packet login(EntryType::LOGIN, 0, 0, "login");
     std::lock_guard<std::mutex> lk(sendMtx_);
     login.send(sock_);

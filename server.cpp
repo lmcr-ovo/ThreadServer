@@ -1,6 +1,6 @@
 #include "server.hpp"  // 包含 server.hpp 头文件
 #include "net/sock.hpp"
-#include "net/protocol.hpp"   // 你的 Packet / EntryType
+#include "net/protocol.hpp"   // Packet 和 EntryType 的定义
 #include <unordered_map>
 #include <thread>
 #include <mutex>
@@ -69,13 +69,13 @@ void Server::clientLoop(std::shared_ptr<User> user) {
             Packet p;
             p.recv(user->sock);
 
-            // 防止伪造发送者 id
+            // 防止客户端伪造发送者 id
             p.id = user->id;
 
-            // 处理登出
+            // 处理登出请求
             if (p.type == EntryType::LOGOUT) break;
 
-            // 广播给其他人
+            // 将消息广播给其他客户端
             broadcast(p, user->id);
         }
     } catch (const std::exception& e) {
@@ -100,7 +100,7 @@ void Server::broadcast(const Packet& p, uint32_t exceptId) {
             std::lock_guard<std::mutex> lk(u->sendMtx);
             p.send(u->sock);
         } catch (...) {
-            // 忽略，后续由对端读写失败触发清理
+            // 这里先忽略异常，后续由对端读写失败触发清理
         }
     }
 }
@@ -134,3 +134,8 @@ uint32_t Server::allocUserId() {
     static std::atomic<uint32_t> seq{1};
     return seq.fetch_add(1);
 }
+
+/*
+g++ -std=c++17 -g -Wall -Wextra .\server_main.cpp .\server.cpp .\net\sock.cpp .\net\protocol.cpp -o .\server.exe -lws2_32
+g++ -std=c++17 -g -Wall -Wextra .\client_main.cpp .\client.cpp .\net\sock.cpp .\net\protocol.cpp -o .\client.exe -lws2_32
+*/
