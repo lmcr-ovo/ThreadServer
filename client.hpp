@@ -1,4 +1,8 @@
 #pragma once
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
+
 #include "sock.hpp"
 #include "protocol.hpp"
 
@@ -25,3 +29,4 @@ private:
 
     void recvLoop();
 };
+#endif // CLIENT_HPP
