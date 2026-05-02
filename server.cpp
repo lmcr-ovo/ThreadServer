@@ -1,6 +1,6 @@
 #include "server.hpp"  // 包含 server.hpp 头文件
-#include "sock.hpp"
-#include "protocol.hpp"   // 你的 Packet / EntryType
+#include "net/sock.hpp"
+#include "net/protocol.hpp"   // 你的 Packet / EntryType
 #include <unordered_map>
 #include <thread>
 #include <mutex>

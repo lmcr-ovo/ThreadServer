@@ -3,8 +3,8 @@
 #define CLIENT_HPP
 
 
-#include "sock.hpp"
-#include "protocol.hpp"
+#include "net/sock.hpp"
+#include "net/protocol.hpp"
 
 #include <thread>
 #include <atomic>

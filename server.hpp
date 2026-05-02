@@ -2,8 +2,8 @@
 #define SERVER_HPP
 
 #pragma once
-#include "sock.hpp"
-#include "protocol.hpp"
+#include "net/sock.hpp"
+#include "net/protocol.hpp"
 
 #include <unordered_map>
 #include <thread>

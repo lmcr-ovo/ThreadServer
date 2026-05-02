@@ -1,6 +1,6 @@
 #include "client.hpp"  // 包含 client.hpp 头文件
-#include "sock.hpp"
-#include "protocol.hpp"
+#include "net/sock.hpp"
+#include "net/protocol.hpp"
 #include <thread>
 #include <atomic>
 #include <mutex>

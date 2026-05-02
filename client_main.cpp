@@ -1,5 +1,5 @@
 // client_main.cpp
-#include "sock.hpp"
+#include "net/sock.hpp"
 #include "client.hpp"
 #include <iostream>
 #include <string>
