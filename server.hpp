@@ -1,51 +1,26 @@
-#ifndef SERVER_HPP
-#define SERVER_HPP
-
-#pragma once
-#include "net/sock.hpp"
-#include "net/protocol.hpp"
-
+#include "lib/net/sock.hpp"
 #include <unordered_map>
-#include <thread>
-#include <mutex>
-#include <atomic>
-#include <memory>
-#include <vector>
-#include <string>
+#include "lib/User.hpp"
+#include "lib/Mutex.hpp"
+#include <process.h>
 
-class User {
-public:
-    uint32_t id;
-    Socket sock;
-    std::mutex sendMtx;
+class Server; // 前向声明
 
-    User(uint32_t uid, Socket&& s) : id(uid), sock(std::move(s)) {}
-    User(const User&) = delete;
-    User& operator=(const User&) = delete;
+struct ThreadParam {
+    Server* server;
+    Socket* sock;
 };
 
 class Server {
-public:
-    explicit Server(uint16_t port);
-    ~Server();
+private:
+    Socket listenSock;
+    Mutex logMutex;
 
-    void start();
-    void stop();
+public:
+    Server();
+    ~Server();
+    void start(uint16_t port);
 
 private:
-    Socket listenSock_;
-    std::atomic<bool> running_{false};
-    std::thread acceptThread_;
-
-    std::mutex mtx_;
-    std::unordered_map<uint32_t, std::shared_ptr<User>> users_;
-    std::unordered_map<uint32_t, std::thread> workers_;
-
-    void acceptLoop();
-    void clientLoop(std::shared_ptr<User> user);
-    void removeUser(uint32_t uid);
-    uint32_t allocUserId();
-
-    void broadcast(const Packet& p, uint32_t exceptId = 0);
+    static unsigned __stdcall clientThread(void* param);
 };
-#endif // SERVER_HPP
