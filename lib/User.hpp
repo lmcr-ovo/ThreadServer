@@ -2,7 +2,6 @@
 #define USER
 #include "net/sock.hpp"
 #include <string>
-#include <unordered_map>
 
 class User {
 private:
@@ -10,6 +9,12 @@ private:
     Socket sock;
 public:
     User(std::string n, Socket&& s) : nickname(std::move(n)), sock(std::move(s)) {}
+    
+    // Move semantics
+    User(User&&) = default;
+    User& operator=(User&&) = default;
+    
+    // Delete copy semantics
     User(const User&) = delete;
     User& operator=(const User&) = delete;
     Socket& getSock() { return sock; }

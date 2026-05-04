@@ -30,10 +30,12 @@ Socket::~Socket() {
     close();
 }
 
-Socket::Socket(Socket&& other) noexcept :sock_(other.sock_) {
+// 移动构造函数
+Socket::Socket(Socket&& other) noexcept : sock_(other.sock_) {
     other.sock_ = INVALID_SOCKET;
 }
 
+// 移动赋值函数
 Socket& Socket::operator=(Socket&& other) noexcept {
     if (this != &other) {
         close();
