@@ -2,6 +2,7 @@
 #define USER
 #include "net/sock.hpp"
 #include <string>
+#include <unordered_map>
 
 class User {
 private:

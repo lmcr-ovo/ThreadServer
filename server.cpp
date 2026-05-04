@@ -7,6 +7,40 @@ Server::Server() = default;
 
 Server::~Server() = default;
 
+void Server::run(uint16_t port) {
+    listenSock = Socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    listenSock.bind(port);
+    listenSock.listen();
+    printf("Server listening on port: %d", port);
+    while (true) {
+        Socket cliSock = listenSock.accept();
+        Packet pkt;
+        pkt.recv(cliSock);
+        if (pkt.type != EntryType::LOGIN) {
+            cliSock.close();
+            throw std::runtime_error("Invaild Login");
+        }
+        User usr(pkt.msg, std::move(cliSock));
+        printf("[update]: %s login\n", usr.getNickname().c_str());
+        HANDLE handle = (HANDLE)_beginthreadex(nullptr, 0, clientThread, &usr, 0, nullptr);
+        if (handle != NULL) CloseHandle(handle);
+    }
+}
+
+unsigned __stdcall Server::cliThread(void* usr) {
+   User* user = (User*) usr;
+   Socket* cliSock = &user->getSock();
+   Packet pkt;
+   while (true) {
+        pkt.recv(*cliSock);
+        if (pkt.type == EntryType::LOGOUT) {
+            printf("[update]: %s logout\n", user->getNickname().c_str());
+            break;
+        }
+        printf("[%s]: %s\n", user->getNickname().c_str(), pkt.msg.c_str());
+   }
+}
+
 void Server::start(uint16_t port) {
     listenSock = Socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     listenSock.bind(port);
