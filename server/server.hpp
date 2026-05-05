@@ -1,6 +1,7 @@
-#include "lib/net/sock.hpp"
+#include "../lib/net/sock.hpp"
+#include "../lib/net/protocol.hpp"
+#include "../lib/User.hpp"
 #include <unordered_map>
-#include "lib/User.hpp"
 #include <process.h>
 
 #include <memory>
@@ -9,13 +10,15 @@
 class Server {
 private:
     Socket listenSock;
-public:
     std::unordered_map<std::string, User> users;
+public:
     Server() = default;
     ~Server() = default;
     void run(uint16_t port);
     auto push(User& usr) {return users.emplace(std::move(usr.getNickname()), std::move(usr));}
     void pop(const std::string& nickname) { users.erase(nickname); }
+    void broadcast(const Packet& pkt) const;
+
 private:
     static unsigned __stdcall cliThread(void* usr);
 };
@@ -25,3 +28,4 @@ struct ThreadParam {
     Server* server;
     User* user;
 };
+// g++ -o ThreadServer.exe    server/main.cpp    server/server.cpp    lib/net/protocol.cpp    lib/net/sock.cpp    -I.    -lws2_32    -std=c++17

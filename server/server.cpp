@@ -1,5 +1,5 @@
 #include "server.hpp"
-#include "lib/net/protocol.hpp"
+#include "../lib/net/protocol.hpp"
 #include <iostream>
 #include <memory>
 
@@ -27,6 +27,13 @@ void Server::run(uint16_t port) {
     }
 }
 
+void Server::broadcast(const Packet& pkt) const {
+    for (const auto& [nickname, usr] : users) {
+        if (pkt.nickname == nickname) continue;
+        pkt.send(usr.getSock());
+    }
+}
+
 unsigned __stdcall Server::cliThread(void* arg) {
     ThreadParam* param = static_cast<ThreadParam*>(arg);
     Server* server = param->server;
@@ -42,10 +49,7 @@ unsigned __stdcall Server::cliThread(void* arg) {
             break;
         }
         printf("[%s]: %s\n", nickname.c_str(), pkt.msg.c_str());
+        server->broadcast(pkt);
    }
    return 0;
 }
-
-
-
-

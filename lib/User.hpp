@@ -17,7 +17,7 @@ public:
     // Delete copy semantics
     User(const User&) = delete;
     User& operator=(const User&) = delete;
-    Socket& getSock() { return sock; }
+    const Socket& getSock() const { return sock; }
     const std::string& getNickname() const { return nickname; }
 };
 #endif

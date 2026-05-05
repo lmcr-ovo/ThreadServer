@@ -90,7 +90,7 @@ Socket Socket::accept() {
     return Socket(s);
 }
 
-void Socket::sendAll(const char* buf, uint64_t size) {
+void Socket::sendAll(const char* buf, uint64_t size) const {
     uint64_t sent = 0;
     while (sent < size) {
         int n = send(sock_, buf + sent, static_cast<int>(size - sent), 0);
@@ -101,7 +101,7 @@ void Socket::sendAll(const char* buf, uint64_t size) {
     }
 }
 
-void Socket::recvAll(char* buf, uint64_t size) {
+void Socket::recvAll(char* buf, uint64_t size) const {
     uint64_t recvd = 0;
     while (recvd < size) {
         int n = recv(sock_, buf + recvd, static_cast<int> (size - recvd), 0);

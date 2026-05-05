@@ -34,8 +34,8 @@ public:
     void listen(int backlog = 5);
     Socket accept();
 
-    void sendAll(const char* buf, uint64_t size);
-    void recvAll(char* buf, uint64_t size);
+    void sendAll(const char* buf, uint64_t size) const;
+    void recvAll(char* buf, uint64_t size) const;
 
     void close();
 };
