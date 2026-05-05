@@ -41,7 +41,7 @@ unsigned __stdcall Client::msgThread(void* cli) {
         while (true) {
             try {
                 pkt.recv(ptr->getSock());
-                printf("%s: %s\n", pkt.nickname.c_str(), pkt.msg.c_str());
+                pkt.prt();
             } catch (const std::exception& e) {
                 printf("[Error in msgThread]: %s\n", e.what());
                 break;
