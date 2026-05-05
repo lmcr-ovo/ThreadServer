@@ -16,8 +16,8 @@ void Server::run(uint16_t port) {
             cliSock.close();
             throw std::runtime_error("Invaild Login");
         }
-        User usr(pkt.msg, std::move(cliSock));
-        printf("[update]: %s login\n", pkt.msg);
+        User usr(pkt.nickname, std::move(cliSock));
+        printf("[update]: %s login\n", pkt.nickname.c_str());
         auto [it, inserted] = push(usr);
         //auto [it, inserted] = users.emplace(pkt.msg, std::move(usr));
 

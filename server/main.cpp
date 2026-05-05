@@ -9,7 +9,9 @@ int main() {
         server.run(12345); // 例如端口12345
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
+        system("pause");
         return 1;
     }
+
     return 0;
 }
