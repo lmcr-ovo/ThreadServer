@@ -23,5 +23,6 @@ public:
     : type(_type), nickLen(_nickLen), nickname(_nickname), msgLen(_msgLen), msg(_msg) {}
     void send(const Socket& s) const;
     void recv(const Socket& s);
+    void prt() const {printf("[%s]: %s\n", nickname.data(), msg.data());}
 };
 #endif 

@@ -7,7 +7,7 @@ void Server::run(uint16_t port) {
     listenSock = Socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     listenSock.bind(port);
     listenSock.listen();
-    printf("Server listening on port: %d", port);
+    printf("Server listening on port: %d\n", port);
     while (true) {
         Socket cliSock = listenSock.accept();
         Packet pkt;
@@ -19,7 +19,6 @@ void Server::run(uint16_t port) {
         User usr(pkt.nickname, std::move(cliSock));
         printf("[update]: %s login\n", pkt.nickname.c_str());
         auto [it, inserted] = push(usr);
-        //auto [it, inserted] = users.emplace(pkt.msg, std::move(usr));
 
         ThreadParam* param = new ThreadParam{this, &it->second};
         HANDLE handle = (HANDLE)_beginthreadex(nullptr, 0, cliThread, param, 0, nullptr);
@@ -27,7 +26,8 @@ void Server::run(uint16_t port) {
     }
 }
 
-void Server::broadcast(const Packet& pkt) const {
+void Server::broadcast(const Packet& pkt) {
+    LockGuard lock(mutex);
     for (const auto& [nickname, usr] : users) {
         if (pkt.nickname == nickname) continue;
         pkt.send(usr.getSock());
@@ -48,7 +48,7 @@ unsigned __stdcall Server::cliThread(void* arg) {
             printf("[update]: %s logout\n", nickname.c_str());
             break;
         }
-        printf("[%s]: %s\n", nickname.c_str(), pkt.msg.c_str());
+        pkt.prt();
         server->broadcast(pkt);
    }
    return 0;

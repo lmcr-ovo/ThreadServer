@@ -18,7 +18,7 @@ class Socket {
 private:
     SOCKET sock_;
 public:
-    Socket() = default;
+    Socket() {sock_ = INVALID_SOCKET;}
     explicit Socket(SOCKET s) : sock_(s) {}
     explicit Socket(int af, int type, int protocol);
     ~Socket();
