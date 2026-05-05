@@ -12,6 +12,6 @@ int main() {
         system("pause");
         return 1;
     }
-
     return 0;
 }
+// g++ -o ThreadServer.exe server/main.cpp server/server.cpp lib/net/protocol.cpp lib/net/sock.cpp -I. -lws2_32 -std=c++17

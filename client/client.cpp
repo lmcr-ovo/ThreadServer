@@ -6,6 +6,7 @@
 #include <cstdio>
 
 void Client::run() {
+    // 调用移动赋值函数
     sock = Socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     sock.connect("127.0.0.1", 12345);
     Packet pkt(EntryType::LOGIN, nickname.size(), nickname, 0, "");

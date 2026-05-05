@@ -9,7 +9,6 @@ int main() {
         printf("input nick name: ");
         std::string nickname = "";
         std::cin >> nickname;
-        printf("DEBUG: name: %s\n", nickname.c_str());
         Client client(nickname);
         printf("input '/quit' to end\n");
         client.run();
@@ -18,6 +17,7 @@ int main() {
         system("pause");
         return 1;
     }
-
     return 0;
 }
+//g++ -o ThreadServer.exe server/main.cpp server/server.cpp lib/net/protocol.cpp lib/net/sock.cpp -I. -lws2_32 -std=c++17
+//g++ -o ThreadClient.exe client/main.cpp client/client.cpp lib/net/protocol.cpp lib/net/sock.cpp -I. -lws2_32 -std=c++17
